@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\TemperatureController;
 use App\Http\Controllers\Api\HumidityController;
 use App\Http\Controllers\Api\MoistureController;
 use App\Http\Controllers\Api\IntensityController;
+use App\Http\Controllers\Api\SensorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,5 +45,8 @@ Route::get('/moistures/{id}', [MoistureController::class, 'show']);
 Route::post('/intensities', [IntensityController::class, 'store']);
 Route::get('/intensities', [IntensityController::class, 'index']);
 Route::get('/intensities/{id}', [IntensityController::class, 'show']);
+
+// Routes untuk Sensor
+Route::post('/sensors', [SensorController::class, 'store']);
 
 //-----------------------------------------------------------------------------------

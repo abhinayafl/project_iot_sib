@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                         <div class="mb-3 mb-sm-0">
-                            <h5 class="card-title fw-semibold">Grafik Sensor Suhu</h5>
+                            <h5 class="card-title fw-semibold">Grafik Temperature Sensor</h5>
                         </div>
                     </div>
                     <div id="sensor-suhu"></div>
@@ -19,10 +19,10 @@
                 <div class="card-body">
                     <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                         <div class="mb-3 mb-sm-0">
-                            <h5 class="card-title fw-semibold">Grafik Sensor Kelembapan</h5>
+                            <h5 class="card-title fw-semibold">Grafik Humidity Sensor</h5>
                         </div>
                     </div>
-                    <div id="sensor-kelembapan"></div>
+                    <div id="sensor-humidity"></div>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                 <div class="card-body">
                     <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                         <div class="mb-3 mb-sm-0">
-                            <h5 class="card-title fw-semibold">Grafik Sensor Intensitas Cahaya</h5>
+                            <h5 class="card-title fw-semibold">Grafik Intensity Sensor</h5>
                         </div>
                     </div>
                     <div id="sensor-intensitas"></div>
@@ -124,7 +124,7 @@
     </script>
     <script>
         (async () => {
-            Highcharts.chart('sensor-kelembapan', {
+            Highcharts.chart('sensor-humidity', {
                 chart: {
                     zooming: {
                         type: 'x'
@@ -144,7 +144,7 @@
                 },
                 yAxis: {
                     title: {
-                        text: 'Kelembapan'
+                        text: 'Humidity'
                     }
 
                 },
