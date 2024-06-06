@@ -46,7 +46,15 @@ Route::post('/intensities', [IntensityController::class, 'store']);
 Route::get('/intensities', [IntensityController::class, 'index']);
 Route::get('/intensities/{id}', [IntensityController::class, 'show']);
 
+// Routes Untuk Sensor Melalui Api Post, Get, Put, Delete
+
+Route::apiResource('sensors', SensorController::class);
+
+// Routes untuk History Sensor
+Route::get('sensors/history', [SensorController::class, 'history'])->name('sensors.history');
+
+
 // Routes untuk Sensor
-Route::post('/sensors', [SensorController::class, 'store']);
+//Route::post('/sensors', [SensorController::class, 'store']);
 
 //-----------------------------------------------------------------------------------

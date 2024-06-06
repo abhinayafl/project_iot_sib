@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Moisture;
 
+use PhpMqtt\Client\Facades\MQTT;
+
 class MoistureController extends Controller
 {
     public function store(Request $request)
@@ -13,6 +15,13 @@ class MoistureController extends Controller
         $request->validate([
             'value' => 'required|numeric',
         ]);
+
+        $data = [
+            'value' => $request->value,
+        ];
+
+        $mqtt = MQTT::connection();
+        $mqtt->publish('sensors/moisture', json_encode($data));
 
         $moisture = Moisture::create($request->all());
 

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Temperature;
 
+use PhpMqtt\Client\Facades\MQTT;
+
 class TemperatureController extends Controller
 {
     public function store(Request $request) // Ini adalah fungsi / method untuk menyimpan data temperatur ke dalam database, penaamn methodnya hanya contoh saja
@@ -13,6 +15,13 @@ class TemperatureController extends Controller
         $request->validate([ // Memberikan validasi pada inputan
             'value' => 'required|numeric', // Validasi inputan value harus berupa angka
         ]);
+
+        $data = [
+            'value' => $request->value,
+        ];
+
+        $mqtt = MQTT::connection();
+        $mqtt->publish('sensors/temperature', json_encode($data));
 
         $temperature = Temperature::create($request->all()); // Menyimpan data temperatur ke dalam database
 

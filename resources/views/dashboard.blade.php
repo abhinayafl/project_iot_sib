@@ -55,275 +55,361 @@
 
 @push('script')
     <script>
-        (async () => {
-            Highcharts.chart('sensor-suhu', {
-                chart: {
-                    zooming: {
-                        type: 'x'
-                    }
-                },
+        let dataSensorSuhu = [];
+        const chart = new Highcharts.Chart('sensor-suhu', {
+            title: {
+                text: ''
+            },
+
+            xAxis: {
+                tickInterval: 1,
+                type: 'datetime',
+            },
+
+            yAxis: {
                 title: {
-                    text: '',
-                    align: 'left'
+                    text: 'Temperature'
                 },
-                subtitle: {
-                    text: document.ontouchstart === undefined ?
-                        '' : 'Pinch the chart to zoom in',
-                    align: 'left'
+                labels: {
+                    format: '{value}°'
                 },
-                xAxis: {
-                    type: 'datetime'
+                accessibility: {
+                    rangeDescription: 'Dari: 0°C Sampai 100°C.'
                 },
-                yAxis: {
-                    title: {
-                        text: 'Temperature'
-                    }
+                lineWidth: 2
+            },
 
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    area: {
-                        fillColor: {
-                            linearGradient: {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [
-                                    1,
-                                    Highcharts.color(Highcharts.getOptions().colors[0])
-                                    .setOpacity(0).get('rgba')
-                                ]
-                            ]
-                        },
-                        marker: {
-                            radius: 2
-                        },
-                        lineWidth: 1,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        },
-                        threshold: null
-                    }
-                },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br />',
+                pointFormat: 'Waktu = {point.x}, Temperature = {point.y}°'
+            },
 
-                series: [{
-                    type: 'area',
-                    name: 'Temperature',
-                    data: [1,23,21,1,23,31,31,33,1,2,12,5,26,63]
-                }]
+            series: [{
+                name: 'Temperature',
+                data: dataSensorSuhu,
+            }]
+        });
+
+        function getDataSensorSuhu() {
+            $.ajax({
+                url: "{{ route('sensors.index') }}?type=temperature",
+                type: "GET",
+                success: function(response) {
+                    dataSensorSuhu = [];
+                    let data = response.data;
+                    data.forEach(function(item) {
+                        let date = new Date(item.created_at);
+                        dataSensorSuhu.push([date.getHours() + ":" + date.getMinutes() + ":" + date
+                            .getSeconds(), item.value
+                        ]);
+                    });
+                    dataSensorSuhu = dataSensorSuhu.reverse();
+                    chart.series[0].setData(dataSensorSuhu);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
             });
-        })();
+        }
+
+        function sendDataSensorSuhu() {
+            $.ajax({
+                url: "{{ route('sensors.store') }}",
+                type: "POST",
+                data: {
+                    type: "temperature",
+                    value: Math.floor(Math.random() * 100) + 1
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function sendDataSensorSuhuSetiapDetik() {
+            setInterval(function() {
+                sendDataSensorSuhu();
+            }, 2000);
+        }
+
+        function getDataSensorSuhuSetiapDetik() {
+            setInterval(function() {
+                getDataSensorSuhu();
+            }, 1000);
+        }
+        getDataSensorSuhuSetiapDetik();
+        sendDataSensorSuhuSetiapDetik();
     </script>
     <script>
-        (async () => {
-            Highcharts.chart('sensor-humidity', {
-                chart: {
-                    zooming: {
-                        type: 'x'
-                    }
-                },
+        let dataSensorHumidity = [];
+        const humiditychart = new Highcharts.Chart('sensor-humidity', {
+            title: {
+                text: ''
+            },
+
+            xAxis: {
+                tickInterval: 1,
+                type: 'datetime',
+            },
+
+            yAxis: {
                 title: {
-                    text: '',
-                    align: 'left'
+                    text: 'Humidity'
                 },
-                subtitle: {
-                    text: document.ontouchstart === undefined ?
-                        '' : 'Pinch the chart to zoom in',
-                    align: 'left'
+                labels: {
+                    format: '{value}%'
                 },
-                xAxis: {
-                    type: 'datetime'
+                accessibility: {
+                    rangeDescription: 'Dari: 0% Sampai 100%.'
                 },
-                yAxis: {
-                    title: {
-                        text: 'Humidity'
-                    }
+                lineWidth: 2
+            },
 
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    area: {
-                        fillColor: {
-                            linearGradient: {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [
-                                    1,
-                                    Highcharts.color(Highcharts.getOptions().colors[0])
-                                    .setOpacity(0).get('rgba')
-                                ]
-                            ]
-                        },
-                        marker: {
-                            radius: 2
-                        },
-                        lineWidth: 1,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        },
-                        threshold: null
-                    }
-                },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br />',
+                pointFormat: 'Waktu = {point.x}, Humidity = {point.y}%'
+            },
 
-                series: [{
-                    type: 'area',
-                    name: 'Kelembapan',
-                    data: [1,23,21,1,23,31,31,33,1,2,12,5,26,63,1,23,21,1,23,31,31,33,1,2,12,5,26,63]
-                }]
+            series: [{
+                name: 'Humidity',
+                data: dataSensorHumidity,
+            }]
+        });
+
+        function getDataSensorHumidity() {
+            $.ajax({
+                url: "{{ route('sensors.index') }}?type=humidity",
+                type: "GET",
+                success: function(response) {
+                    dataSensorHumidity = [];
+                    let data = response.data;
+                    data.forEach(function(item) {
+                        let date = new Date(item.created_at);
+                        dataSensorHumidity.push([date.getHours() + ":" + date.getMinutes() + ":" + date
+                            .getSeconds(), item.value
+                        ]);
+                    });
+                    dataSensorHumidity = dataSensorHumidity.reverse();
+                    humiditychart.series[0].setData(dataSensorHumidity);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
             });
-        })();
+        }
+
+        function sendDataSensorHumidity() {
+            $.ajax({
+                url: "{{ route('sensors.store') }}",
+                type: "POST",
+                data: {
+                    type: "humidity",
+                    value: Math.floor(Math.random() * 100) + 1
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function sendDataSensorHumiditySetiapDetik() {
+            setInterval(function() {
+                sendDataSensorHumidity();
+            }, 2000);
+        }
+
+        function getDataSensorHumiditySetiapDetik() {
+            setInterval(function() {
+                getDataSensorHumidity();
+            }, 1000);
+        }
+        // getDataSensorHumiditySetiapDetik();
+        // sendDataSensorHumiditySetiapDetik();
     </script>
+
     <script>
-        (async () => {
-            Highcharts.chart('sensor-moisture', {
-                chart: {
-                    zooming: {
-                        type: 'x'
-                    }
-                },
+        let dataSensorMoisture = [];
+        const moistureChart = new Highcharts.Chart('sensor-moisture', {
+            title: {
+                text: ''
+            },
+
+            xAxis: {
+                tickInterval: 1,
+                type: 'datetime',
+            },
+
+            yAxis: {
                 title: {
-                    text: '',
-                    align: 'left'
+                    text: 'Moisture'
                 },
-                subtitle: {
-                    text: document.ontouchstart === undefined ?
-                        '' : 'Pinch the chart to zoom in',
-                    align: 'left'
+                labels: {
+                    format: '{value}%'
                 },
-                xAxis: {
-                    type: 'datetime'
+                accessibility: {
+                    rangeDescription: 'Dari: 0% Sampai 100%.'
                 },
-                yAxis: {
-                    title: {
-                        text: 'Moisture'
-                    }
+                lineWidth: 2
+            },
 
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    area: {
-                        fillColor: {
-                            linearGradient: {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [
-                                    1,
-                                    Highcharts.color(Highcharts.getOptions().colors[0])
-                                    .setOpacity(0).get('rgba')
-                                ]
-                            ]
-                        },
-                        marker: {
-                            radius: 2
-                        },
-                        lineWidth: 1,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        },
-                        threshold: null
-                    }
-                },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br />',
+                pointFormat: 'Waktu = {point.x}, Moisture = {point.y}%'
+            },
 
-                series: [{
-                    type: 'area',
-                    name: 'Moisture',
-                    data: [1,23,21,1,23,31,31,33,1,2,12,5,26,63,1,23,21,1,23,31,31,33,1,2,12,5,26,63]
-                }]
+            series: [{
+                name: 'Moisture',
+                data: dataSensorMoisture,
+            }]
+        });
+
+        function getDataSensorMoisture() {
+            $.ajax({
+                url: "{{ route('sensors.index') }}?type=moisture",
+                type: "GET",
+                success: function(response) {
+                    dataSensorMoisture = [];
+                    let data = response.data;
+                    data.forEach(function(item) {
+                        let date = new Date(item.created_at);
+                        dataSensorMoisture.push([date.getHours() + ":" + date.getMinutes() + ":" + date
+                            .getSeconds(), item.value
+                        ]);
+                    });
+                    dataSensorMoisture = dataSensorMoisture.reverse();
+                    moistureChart.series[0].setData(dataSensorMoisture);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
             });
-        })();
+        }
+
+        function sendDataSensorMoisture() {
+            $.ajax({
+                url: "{{ route('sensors.store') }}",
+                type: "POST",
+                data: {
+                    type: "moisture",
+                    value: Math.floor(Math.random() * 100) + 1
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function sendDataSensorMoistureSetiapDetik() {
+            setInterval(function() {
+                sendDataSensorMoisture();
+            }, 2000);
+        }
+
+        function getDataSensorMoistureSetiapDetik() {
+            setInterval(function() {
+                getDataSensorMoisture();
+            }, 1000);
+        }
+        // getDataSensorMoistureSetiapDetik();
+        // sendDataSensorMoistureSetiapDetik();
     </script>
+
     <script>
-        (async () => {
-            Highcharts.chart('sensor-intensitas', {
-                chart: {
-                    zooming: {
-                        type: 'x'
-                    }
-                },
+        let dataSensorIntensity = [];
+        const intensityChart = new Highcharts.Chart('sensor-intensitas', {
+            title: {
+                text: ''
+            },
+
+            xAxis: {
+                tickInterval: 1,
+                type: 'datetime',
+            },
+
+            yAxis: {
                 title: {
-                    text: '',
-                    align: 'left'
+                    text: 'Intensity'
                 },
-                subtitle: {
-                    text: document.ontouchstart === undefined ?
-                        '' : 'Pinch the chart to zoom in',
-                    align: 'left'
+                labels: {
+                    format: '{value}%'
                 },
-                xAxis: {
-                    type: 'datetime'
+                accessibility: {
+                    rangeDescription: 'Dari: 0% Sampai 100%.'
                 },
-                yAxis: {
-                    title: {
-                        text: 'Intensitas'
-                    }
+                lineWidth: 2
+            },
 
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    area: {
-                        fillColor: {
-                            linearGradient: {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [
-                                    1,
-                                    Highcharts.color(Highcharts.getOptions().colors[0])
-                                    .setOpacity(0).get('rgba')
-                                ]
-                            ]
-                        },
-                        marker: {
-                            radius: 2
-                        },
-                        lineWidth: 1,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        },
-                        threshold: null
-                    }
-                },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br />',
+                pointFormat: 'Waktu = {point.x}, Intensity = {point.y}%'
+            },
 
-                series: [{
-                    type: 'area',
-                    name: 'Intensitas',
-                    data: [21,31,33,1,2,12,5,26,63,1,23,21,1,23,31,31,33,1,2,12,5,26,63]
-                }]
+            series: [{
+                name: 'Intensity',
+                data: dataSensorIntensity,
+            }]
+        });
+
+        function getDataSensorIntensity() {
+            $.ajax({
+                url: "{{ route('sensors.index') }}?type=intensity",
+                type: "GET",
+                success: function(response) {
+                    dataSensorIntensity = [];
+                    let data = response.data;
+                    data.forEach(function(item) {
+                        let date = new Date(item.created_at);
+                        dataSensorIntensity.push([date.getHours() + ":" + date.getMinutes() + ":" + date
+                            .getSeconds(), item.value
+                        ]);
+                    });
+                    dataSensorIntensity = dataSensorIntensity.reverse();
+                    intensityChart.series[0].setData(dataSensorIntensity);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
             });
-        })();
+        }
+
+        function sendDataSensorIntensity() {
+            $.ajax({
+                url: "{{ route('sensors.store') }}",
+                type: "POST",
+                data: {
+                    type: "intensity",
+                    value: Math.floor(Math.random() * 100) + 1
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function sendDataSensorIntensitySetiapDetik() {
+            setInterval(function() {
+                sendDataSensorIntensity();
+            }, 2000);
+        }
+
+        function getDataSensorIntensitySetiapDetik() {
+            setInterval(function() {
+                getDataSensorIntensity();
+            }, 1000);
+        }
+        // getDataSensorIntensitySetiapDetik();
+        // sendDataSensorIntensitySetiapDetik();
     </script>
 @endpush
