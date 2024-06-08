@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\HumidityController;
 use App\Http\Controllers\Api\MoistureController;
 use App\Http\Controllers\Api\IntensityController;
 use App\Http\Controllers\Api\SensorController;
+use App\Http\Controllers\Api\ActuatorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,11 @@ Route::apiResource('sensors', SensorController::class);
 
 // Routes untuk History Sensor
 Route::get('sensors/history', [SensorController::class, 'history'])->name('sensors.history');
+
+// Routes untuk Aktuator
+Route::post('/toggle-water-pump', [ActuatorController::class, 'toggleWaterPump'])->name('api.toggle.waterPump');
+Route::post('/toggle-lamp', [ActuatorController::class, 'toggleLamp'])->name('api.toggle.lamp');
+Route::get('/actuator-statuses', [ActuatorController::class, 'getStatuses'])->name('api.actuator.statuses');
 
 
 // Routes untuk Sensor

@@ -141,7 +141,7 @@
             }, 1000);
         }
         getDataSensorSuhuSetiapDetik();
-        sendDataSensorSuhuSetiapDetik();
+        // sendDataSensorSuhuSetiapDetik();
     </script>
     <script>
         let dataSensorHumidity = [];
@@ -229,7 +229,7 @@
                 getDataSensorHumidity();
             }, 1000);
         }
-        // getDataSensorHumiditySetiapDetik();
+        getDataSensorHumiditySetiapDetik();
         // sendDataSensorHumiditySetiapDetik();
     </script>
 
@@ -319,7 +319,7 @@
                 getDataSensorMoisture();
             }, 1000);
         }
-        // getDataSensorMoistureSetiapDetik();
+        getDataSensorMoistureSetiapDetik();
         // sendDataSensorMoistureSetiapDetik();
     </script>
 
@@ -409,7 +409,7 @@
                 getDataSensorIntensity();
             }, 1000);
         }
-        // getDataSensorIntensitySetiapDetik();
+        getDataSensorIntensitySetiapDetik();
         // sendDataSensorIntensitySetiapDetik();
     </script>
 @endpush
