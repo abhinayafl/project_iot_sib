@@ -21,15 +21,14 @@
                         </select>
                         <table id="sensor-table" class="table display">
                             <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Type</th>
-                                    <th>Value</th>
-                                    <th>Created At</th>
-                                </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Value</th>
+                                <th>Dibuat</th>
+                                <th>Diupdate</th>
+                            </tr>
                             </thead>
-                            <tbody class="table-group-divider">
-                                <!-- Data will be populated by DataTables -->
+                            <tbody>
                             </tbody>
                         </table>
                     </div>
@@ -37,133 +36,34 @@
             </div>
         </div>
     </div>
-
-    <!-- Chart Containers -->
-    <div id="sensor-humidity" style="height: 400px; width: 100%;"></div>
-    <div id="sensor-intensity" style="height: 400px; width: 100%;"></div>
 @endsection
 
-@section('scripts')
+@push('custom-js')
     <script>
         $(document).ready(function() {
-            // Initialize DataTables
-            var table = $('#sensor-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: "{{ route('sensors.history') }}",
-                    type: "GET",
-                    data: function(d) {
-                        d.type = $('#sensor-type').val();
-                    }
-                },
-                columns: [
-                    { data: 'id' },
-                    { data: 'type' },
-                    { data: 'value' },
-                    { data: 'created_at' }
-                ]
-            });
-
-            // Event listener to the type filter
+            var dataTable = $('#sensor-table').DataTable();
             $('#sensor-type').change(function() {
-                table.ajax.reload();
-            });
-
-            // Function to periodically reload the data
-            setInterval(function() {
-                table.ajax.reload(null, false); // Reload data without resetting the paging
-            }, 5000); // Reload every 5 seconds
-
-            // Initialize Highcharts
-            const humidityChart = Highcharts.chart('sensor-humidity', {
-                title: {
-                    text: 'Humidity Data'
-                },
-                xAxis: {
-                    tickInterval: 1,
-                    type: 'datetime',
-                },
-                yAxis: {
-                    title: {
-                        text: 'Humidity (%)'
-                    },
-                    labels: {
-                        format: '{value}%'
-                    },
-                    lineWidth: 2
-                },
-                tooltip: {
-                    headerFormat: '<b>{series.name}</b><br />',
-                    pointFormat: 'Time: {point.x}, Humidity: {point.y}%'
-                },
-                series: [{
-                    name: 'Humidity',
-                    data: [] // Initialize with empty data
-                }]
-            });
-
-            // Function to get data for Highcharts
-            function getDataSensorHumidity() {
+                var selectedValue = $(this).val();
+                dataTable.clear().draw();
+                console.log(selectedValue);
                 $.ajax({
-                    url: "{{ route('sensors.index') }}?type=humidity",
-                    type: "GET",
-                    success: function(response) {
-                        let data = response.data.map(item => {
-                            let date = new Date(item.created_at);
-                            return [date.getTime(), item.value];
+                    url: '/api/sensors/history?type=' + selectedValue,
+                    type: 'GET',
+                    success: function(data) {
+                        $.each(data, function(index, item) {
+                            dataTable.row.add([
+                                item.id,
+                                item.value,
+                                item.created_at,
+                                item.updated_at
+                            ]).draw();
                         });
-                        humidityChart.series[0].setData(data);
                     },
-                    error: function(error) {
-                        console.log(error);
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
                     }
                 });
-            }
-
-            // Periodically fetch data for Highcharts
-            setInterval(getDataSensorHumidity, 5000); // Fetch data every 5 seconds
-
-            // Initialize ApexCharts
-            var options = {
-                chart: {
-                    type: 'line',
-                    height: 350
-                },
-                series: [{
-                    name: 'Intensity',
-                    data: []
-                }],
-                xaxis: {
-                    type: 'datetime'
-                }
-            };
-
-            var intensityChart = new ApexCharts(document.querySelector("#sensor-intensity"), options);
-            intensityChart.render();
-
-            // Function to get data for ApexCharts
-            function getDataSensorIntensity() {
-                $.ajax({
-                    url: "{{ route('sensors.index') }}?type=intensity",
-                    type: "GET",
-                    success: function(response) {
-                        let data = response.data.map(item => {
-                            let date = new Date(item.created_at);
-                            return {x: date.getTime(), y: item.value};
-                        });
-                        intensityChart.updateSeries([{
-                            data: data
-                        }]);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
-
-            // Periodically fetch data for ApexCharts
-            setInterval(getDataSensorIntensity, 5000); // Fetch data every 5 seconds
+            });
         });
     </script>
-@endsection
+@endpush

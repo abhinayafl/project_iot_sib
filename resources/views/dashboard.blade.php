@@ -53,7 +53,7 @@
     </div>
 @endsection
 
-@push('script')
+@push('custom-js')
     <script>
         let dataSensorSuhu = [];
         const chart = new Highcharts.Chart('sensor-suhu', {
@@ -81,7 +81,7 @@
 
             tooltip: {
                 headerFormat: '<b>{series.name}</b><br />',
-                pointFormat: 'Waktu = {point.x}, Temperature = {point.y}°'
+                pointFormat: 'Waktu = {point.x:%H:%M:%S}, Temperature = {point.y}°'
             },
 
             series: [{
@@ -96,12 +96,9 @@
                 type: "GET",
                 success: function(response) {
                     dataSensorSuhu = [];
-                    let data = response.data;
-                    data.forEach(function(item) {
+                    $.each(response, function(index, item) {
                         let date = new Date(item.created_at);
-                        dataSensorSuhu.push([date.getHours() + ":" + date.getMinutes() + ":" + date
-                            .getSeconds(), item.value
-                        ]);
+                        dataSensorSuhu.push([date.getTime(), item.value]);
                     });
                     dataSensorSuhu = dataSensorSuhu.reverse();
                     chart.series[0].setData(dataSensorSuhu);
@@ -170,7 +167,7 @@
 
             tooltip: {
                 headerFormat: '<b>{series.name}</b><br />',
-                pointFormat: 'Waktu = {point.x}, Humidity = {point.y}%'
+                pointFormat: 'Waktu ={point.x:%H:%M:%S}, Humidity = {point.y}%'
             },
 
             series: [{
@@ -185,12 +182,9 @@
                 type: "GET",
                 success: function(response) {
                     dataSensorHumidity = [];
-                    let data = response.data;
-                    data.forEach(function(item) {
+                    $.each(response, function(index, item) {
                         let date = new Date(item.created_at);
-                        dataSensorHumidity.push([date.getHours() + ":" + date.getMinutes() + ":" + date
-                            .getSeconds(), item.value
-                        ]);
+                        dataSensorHumidity.push([date.getTime(), item.value]);
                     });
                     dataSensorHumidity = dataSensorHumidity.reverse();
                     humiditychart.series[0].setData(dataSensorHumidity);
@@ -260,7 +254,7 @@
 
             tooltip: {
                 headerFormat: '<b>{series.name}</b><br />',
-                pointFormat: 'Waktu = {point.x}, Moisture = {point.y}%'
+                pointFormat: 'Waktu = {point.x:%H:%M:%S}, Moisture = {point.y}%'
             },
 
             series: [{
@@ -275,12 +269,9 @@
                 type: "GET",
                 success: function(response) {
                     dataSensorMoisture = [];
-                    let data = response.data;
-                    data.forEach(function(item) {
+                    $.each(response, function(index, item) {
                         let date = new Date(item.created_at);
-                        dataSensorMoisture.push([date.getHours() + ":" + date.getMinutes() + ":" + date
-                            .getSeconds(), item.value
-                        ]);
+                        dataSensorMoisture.pus([date.getTime(), item.value]);
                     });
                     dataSensorMoisture = dataSensorMoisture.reverse();
                     moistureChart.series[0].setData(dataSensorMoisture);
@@ -350,7 +341,7 @@
 
             tooltip: {
                 headerFormat: '<b>{series.name}</b><br />',
-                pointFormat: 'Waktu = {point.x}, Intensity = {point.y}%'
+                pointFormat: 'Waktu = {point.x:%H:%M:%S}, Intensity = {point.y}%'
             },
 
             series: [{
@@ -365,12 +356,18 @@
                 type: "GET",
                 success: function(response) {
                     dataSensorIntensity = [];
-                    let data = response.data;
-                    data.forEach(function(item) {
+                    $.each(response, function(index, item) {
                         let date = new Date(item.created_at);
-                        dataSensorIntensity.push([date.getHours() + ":" + date.getMinutes() + ":" + date
-                            .getSeconds(), item.value
-                        ]);
+                        let jakartaTime = new Intl.DateTimeFormat('en-US', {
+                                timeZone: 'Asia/Jakarta',
+                                year: 'numeric',
+                                month: 'numeric',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                second: 'numeric'
+                            }).format(date);
+                        dataSensorIntensity.push([new Date(jakartaTime).getTime(), item.value]);
                     });
                     dataSensorIntensity = dataSensorIntensity.reverse();
                     intensityChart.series[0].setData(dataSensorIntensity);
@@ -401,7 +398,7 @@
         function sendDataSensorIntensitySetiapDetik() {
             setInterval(function() {
                 sendDataSensorIntensity();
-            }, 2000);
+            }, 5000);
         }
 
         function getDataSensorIntensitySetiapDetik() {
@@ -410,6 +407,6 @@
             }, 1000);
         }
         getDataSensorIntensitySetiapDetik();
-        // sendDataSensorIntensitySetiapDetik();
+        sendDataSensorIntensitySetiapDetik();
     </script>
 @endpush

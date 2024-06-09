@@ -14,11 +14,12 @@ class SensorController extends Controller
     public function index(Request $request){
 
         $type = $request->type;
-        $sensors = Sensor::orderBy("id", "desc");
-        if ($type){
-            $sensors = Sensor::where("type", $type);
+        if ($type) {
+            $sensors = Sensor::where('type', $type)->get();
+        } else {
+            $sensors = Sensor::orderBy("id", "desc")->get();
         }
-        $sensors = $sensors->paginate(20);
+        $sensors = $sensors->take(20);
 
         return response()->json($sensors);
 
@@ -37,8 +38,8 @@ class SensorController extends Controller
             'value' => $request->value,
         ];
 
-        $mqtt = MQTT::connection();
-        $mqtt->publish($topic, json_encode($data));
+        // $mqtt = MQTT::connection();
+        // $mqtt->publish($topic, json_encode($data));
 
         //--------------------------------------------
 
@@ -50,19 +51,13 @@ class SensorController extends Controller
     public function history(Request $request)
     {
         $type = $request->type;
-        $query = Sensor::orderBy("id", "desc");
-
         if ($type) {
-            $query->where("type", $type);
+            $sensors = Sensor::where('type', $type)->get();
+        } else {
+            $sensors = Sensor::orderBy("id", "desc")->get();
         }
 
-        $sensors = $query->paginate(20);
-
-        return response()->json([
-            'data' => $sensors->items(),
-            'recordsTotal' => $sensors->total(),
-            'recordsFiltered' => $sensors->total(),
-        ]);
+        return response()->json($sensors);
     }
 
 

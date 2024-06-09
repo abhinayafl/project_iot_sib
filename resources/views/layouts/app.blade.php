@@ -55,25 +55,25 @@
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
                             <li class="nav-item dropdown">
                                 <a class="nav-link " href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                                   aria-expanded="false">
                                     <img src="assets/images/profile/menfarm.png" alt="" width="35"
-                                        height="35" class="rounded-circle">
+                                         height="35" class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
-                                    aria-labelledby="drop2">
+                                     aria-labelledby="drop2">
                                     <div class="message-body">
                                         <a href="javascript:void(0)"
-                                            class="d-flex align-items-center gap-2 dropdown-item">
+                                           class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-user fs-6"></i>
                                             <p class="mb-0 fs-3">My Profile</p>
                                         </a>
                                         <a href="javascript:void(0)"
-                                            class="d-flex align-items-center gap-2 dropdown-item">
+                                           class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-mail fs-6"></i>
                                             <p class="mb-0 fs-3">My Account</p>
                                         </a>
                                         <a href="javascript:void(0)"
-                                            class="d-flex align-items-center gap-2 dropdown-item">
+                                           class="d-flex align-items-center gap-2 dropdown-item">
                                             <i class="ti ti-list-check fs-6"></i>
                                             <p class="mb-0 fs-3">My Task</p>
                                         </a>
@@ -81,7 +81,8 @@
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <button type="submit" class="btn btn-outline-primary mx-3 mt-2 d-block"
-                                                style="width: 180px;">Logout</button>
+                                                    style="width: 180px;">Logout
+                                            </button>
                                         </form>
 
                                     </div>
@@ -98,7 +99,7 @@
                     @yield('content')
                     <div class="py-6 px-6 text-center">
                         <p class="mb-0 fs-4">© Copyright 2024 <a href="https://github.com/abhinayafl" target="_blank"
-                                class="pe-1 text-primary text-decoration-underline">Kaftapus</a><span>All Rights
+                                                                 class="pe-1 text-primary text-decoration-underline">Kaftapus</a><span>All Rights
                                 Reserved</span></p>
                     </div>
                 </div>
@@ -121,16 +122,19 @@
     <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
     <!-- DataTables JS -->
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
 
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
 
 
     <!-- solar icons -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+    @stack('custom-js')
 </body>
 
 </html>

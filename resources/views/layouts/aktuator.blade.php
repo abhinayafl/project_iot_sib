@@ -39,14 +39,15 @@
     </div>
 @endsection
 
-@push('scripts')
+@push('custom-js')
     <script>
         $(document).ready(function() {
-            // Toggle water pump status
             $('#waterPumpSwitch').change(function() {
                 var isChecked = $(this).is(':checked');
                 var status = isChecked ? 'Nyala' : 'Mati';
                 var dataToSend = isChecked ? 1 : 0;
+
+                console.log(status);
 
                 $.ajax({
                     url: "{{ route('api.toggle.waterPump') }}",
